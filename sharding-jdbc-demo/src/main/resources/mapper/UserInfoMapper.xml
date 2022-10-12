@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.UserInfoMapper">
+    <resultMap id="BaserMapper" type="com.entity.UserInfo">
+        <result column="id" jdbcType="BIGINT" property="id" ></result>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"></result>
+        <result column="age" jdbcType="INTEGER" property="age"></result>
+    </resultMap>
+    <sql id="baseColumn">
+        id,user_name,age
+    </sql>
+    <select id="getUserInfoList" resultMap="BaserMapper">
+        select <include refid="baseColumn"></include> from user_info
+    </select>
+    <insert id="addUserInfo" parameterType="com.entity.UserInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into user_info (user_name,age) values (#{userName},#{age})
+    </insert>
+    <update id="updateUserInfo">
+        update user_info set user_name=#{userName} where id= #{id}
+    </update>
+    <select id="getUserInfoListOnDepotsTable" resultMap="BaserMapper">
+        select * from user_info
+    </select>
+    <insert id="addUserInfoOnDepotsTable" parameterType="com.entity.UserInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into user_info (user_name,age) values (#{userName},#{age})
+    </insert>
+
+</mapper>

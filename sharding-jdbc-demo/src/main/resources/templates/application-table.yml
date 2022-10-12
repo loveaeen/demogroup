@@ -1,0 +1,55 @@
+#分库分表配置
+#没看到哪里用到了
+spring:
+  shardingsphere:
+    datasource:
+      names: master,slave0,slave1
+      master:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.119.50:3306/test1?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+        username: root
+        password: root
+      slave0:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.119.51:3306/test1?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+        username: root
+        password: root
+      slave1:
+        type: com.alibaba.druid.pool.DruidDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://192.168.119.52:3306/test1?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+        username: root
+        password: root
+        # 读写分离配置
+#    masterslave:
+#      load-balance-algorithm-type: round_robin
+#      name: ms
+#      master-data-source-name: master
+#      slave-data-source-names: slave0,slave1
+
+    props:
+      sql:
+        show: true
+    #分区分表l
+    sharding:
+#      default-database-strategy:
+#        inline:
+#          sharding-column: age #  分库字段
+#          algorithm-expression: slave$->{age%2} #分表算法
+      tables:
+        user_info: #同库下分表别名
+          actual-data-nodes: slave$->{0..1}.user_info$->{1..2} #定义节点
+          table-strategy:
+            inline:
+              sharding-column: id # 表字段
+              algorithm-expression: user_info$->{id%2} # 分表策略
+#        t_order_item: #同库下分表别名多个表分表时
+#          actual-data-nodes: slave$->{0..1}.user_info_item$->{0..1}
+#            table-strategy:
+#              inline:
+#                sharding-column: age # 表字段
+#                algorithm-expression: user_info$->{age>15} # 分表策略
+
+

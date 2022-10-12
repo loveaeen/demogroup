@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.UserTypeMapper">
+    <resultMap id="BaserMapper" type="com.entity.UserType">
+        <result column="id" jdbcType="BIGINT" property="id" ></result>
+        <result column="user_type" jdbcType="VARCHAR" property="userType"></result>
+    </resultMap>
+    <sql id="baseColumn">
+        id,user_type
+    </sql>
+    <select id="getUserTypeList_temp" resultMap="BaserMapper">
+        select <include refid="baseColumn"></include> from user_type
+    </select>
+
+    <select id="getUserTypeList" resultMap="BaserMapper">
+        select * from user_type ut inner join user_all ua on ut.user_type = ua.user_type
+    </select>
+
+    <select id="getUserTypeList" resultMap="BaserMapper">
+        select * from user_type ut inner join user_info ua on ut.user_type = ua.id
+    </select>
+
+
+</mapper>
