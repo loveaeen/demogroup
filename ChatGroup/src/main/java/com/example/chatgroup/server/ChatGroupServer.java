@@ -87,8 +87,6 @@ public class ChatGroupServer {
         } catch (IOException e) {
             try {
                 System.out.println(socketChannel.getRemoteAddress()+"客户端已经下线");
-                // 取消注册
-                selectionKey.cancel();
                 // 关闭通道
                 socketChannel.close();
             } catch (IOException ex) {
