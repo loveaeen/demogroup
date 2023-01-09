@@ -5,6 +5,7 @@ services:
     container_name: zookeeper0
     ports:
       - "2181:2181"
+    restart: always
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -15,26 +16,39 @@ services:
     ports:
       - "9092:9092"
       - "29092:29092"
+    restart: always
     environment:
       # 访问地址
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka0:9092,PLAINTEXT_HOST://localhost:29092
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+
+      # 消息日志保留时间 BYTES, MINUTES, HOURS
+      # 超出指定值则删除消息，并将offset移动到最后删除的消息位置，消费者就丢失这些消息，再也无法消费
+#      KAFKA_LOG_RETENTION_MS: 10000
+      # 消息多久检查一次是否过期
+#      KAFKA_LOG_RETENTION_CHECK_INTERVAL_MS: 5000
+
+      # 偏移量保留的时间，到期后，会将消费者消费的偏移量置空，再根据 `auto-offset-reset`值去找最新或最晚的消息日志进行消费
+      # 该值一般大于等于 `log.retention.ms/minutes/hours`，否则会出现消费者消费的消息日志被删除，但是偏移量还在，导致消费者无法消费
+#      KAFKA_OFFSETS_RETENTION_MINUTES: 1
+      # 多久检查一次删除偏移量
+#      KAFKA_OFFSETS_RETENTION_CHECK_INTERVAL_MS: 5000
+
       # 复制因子
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       # Zookeeper 的访问地址
       KAFKA_ZOOKEEPER_CONNECT: zookeeper0:2181
-      # 匿名且不加密的访问
-      ALLOW_PLAINTEXT_LISTENER: yes
     depends_on:
       - zookeeper0
   kafka-ui:
-    image: provectuslabs/kafka-ui
+    image: 'provectuslabs/kafka-ui:latest'
     container_name: kafka-ui
     ports:
-      - "8080:8080"
+      - "8090:8090"
     restart: always
     environment:
+      SERVER_PORT: 8090
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka0:9092
     depends_on:
