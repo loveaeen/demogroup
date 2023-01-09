@@ -2,10 +2,9 @@ spring:
   kafka:
     consumer:
       auto-offset-reset: earliest # 设置消费者分组最初的消费进度为 earliest
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer # 消息的 key 的序列化
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer # 消息的 value 的序列化
       enable-auto-commit: false # 使用 Spring-Kafka 的消费进度的提交机制
-      max-poll-records: 10
     listener:
       ack-mode: manual_immediate # 手动提交的模式
     bootstrap-servers: localhost:29092
@@ -18,8 +17,6 @@ spring:
         max:
           block:
             ms: 60000 # 默认值，发送消息时，如果消息队列的缓冲区满了，等待的时间
-    retry:
-      topic:
-        delay:
+#      transaction-id-prefix: kfk # kafka 事务的前缀，只要配置了该属性，就必须使用事务发布，如果还想用非事务发布就比较麻烦了，Spring 就会自动创建一个 kafka 的事务 bean
 server:
   port: 8081
