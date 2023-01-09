@@ -19,7 +19,7 @@ public class MyConsumerInterceptor implements ConsumerInterceptor<String, String
      */
     @Override
     public ConsumerRecords<String, String> onConsume(ConsumerRecords<String, String> records) {
-        System.out.println("consumer interceptor"+records);
+        System.out.println("consumer interceptor ----------- "+records);
         return records;
     }
 
@@ -29,7 +29,7 @@ public class MyConsumerInterceptor implements ConsumerInterceptor<String, String
      */
     @Override
     public void onCommit(Map<TopicPartition, OffsetAndMetadata> offsets) {
-        System.out.println("consumer interceptor onCommit"+offsets);
+        System.out.println("consumer interceptor onCommit ------------ "+offsets);
     }
 
     @Override

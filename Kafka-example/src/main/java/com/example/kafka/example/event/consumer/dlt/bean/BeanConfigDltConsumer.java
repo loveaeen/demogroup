@@ -8,9 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class BeanConfigDltConsumer {
     /**
-     * 使用 @bean 配置创建的重试队列
-     * @param consumerRecord
-     * @param ack
+     * 使用 {@link RetryTopicConfig} 配置创建的重试队列
      */
     @KafkaListener(id = "consumer-b-dlt", clientIdPrefix = "consumer-b-dlt", topics = "topic4-b-r", groupId = "mygroup4", concurrency = "1")
     public void listenAllTwo(ConsumerRecord<?, ?> consumerRecord, Acknowledgment ack) {

@@ -1,22 +1,22 @@
 spring:
   kafka:
+    bootstrap-servers: localhost:29092
     consumer:
       auto-offset-reset: earliest # 设置消费者分组最初的消费进度为 earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer # 消息的 key 的序列化
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer # 消息的 value 的序列化
-      enable-auto-commit: false # 使用 Spring-Kafka 的消费进度的提交机制
+      enable-auto-commit: false # 禁止自动提交
     listener:
       ack-mode: manual_immediate # 手动提交的模式
-    bootstrap-servers: localhost:29092
     producer:
       acks: 1 # 0-不应答。1-leader 应答。all-所有 leader 和 follower 应答。
-      retries: 3 # 发送失败时，重试发送的次数
       key-serializer: org.apache.kafka.common.serialization.StringSerializer # 消息的 key 的序列化
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer # 消息的 value 的序列化
       properties:
-        max:
-          block:
-            ms: 60000 # 默认值，发送消息时，如果消息队列的缓冲区满了，等待的时间
+        linger.ms: 0 # 消息发送延迟，默认值 0 无延迟
+        request.timeout.ms: 30000 # 请求超时时间，默认值 30s
+        delivery.timeout.ms: 120000 # 消息发送超时时间，默认值 120s ，应该大于 request.timeout.ms+linger.ms。影响消息发送的超时报错。
+        max.block.ms: 1000 # 默认值 1 分钟，发送消息时，控制最大阻塞时长
 #      transaction-id-prefix: kfk # kafka 事务的前缀，只要配置了该属性，就必须使用事务发布，如果还想用非事务发布就比较麻烦了，Spring 就会自动创建一个 kafka 的事务 bean
 server:
   port: 8081
