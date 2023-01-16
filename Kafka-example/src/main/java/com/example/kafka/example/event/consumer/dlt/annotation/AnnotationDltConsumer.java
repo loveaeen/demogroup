@@ -22,7 +22,6 @@ public class AnnotationDltConsumer {
             attempts = "4", // 该重试次数是包含了第一次发送的，所以实际上是 3 次重试。
             backoff = @Backoff(delay = 1000, multiplier = 2.0), // 创建的 topic 数量
             include = Throwable.class, // 指定重试的异常，如果不是该异常，直接发送到 DLT 里，不用重试了
-            autoCreateTopics = "false",
             topicSuffixingStrategy = TopicSuffixingStrategy.SUFFIX_WITH_DELAY_VALUE)
     @KafkaListener(id = "consumer-a-dlt", clientIdPrefix = "consumer-a-dlt", topics = "topic3-a-r", groupId = "mygroup3", concurrency = "1")
     public void listenAllOne(ConsumerRecord<?, ?> consumerRecord, Acknowledgment ack) {

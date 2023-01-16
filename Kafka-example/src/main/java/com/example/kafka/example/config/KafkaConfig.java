@@ -1,11 +1,10 @@
 package com.example.kafka.example.config;
 
-import com.example.kafka.example.interceptor.MyConsumerInterceptor;
-import com.example.kafka.example.interceptor.MyProducerInterceptor;
-import io.micrometer.observation.Observation;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.springframework.context.annotation.Bean;
@@ -16,9 +15,8 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.ProducerListener;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
+import com.example.kafka.example.interceptor.MyConsumerInterceptor;
+import com.example.kafka.example.interceptor.MyProducerInterceptor;
 
 @Configuration
 public class KafkaConfig {

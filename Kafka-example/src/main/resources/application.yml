@@ -13,10 +13,11 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer # 消息的 key 的序列化
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer # 消息的 value 的序列化
       properties:
-        linger.ms: 0 # 消息发送延迟，默认值 0 无延迟
-        request.timeout.ms: 30000 # 请求超时时间，默认值 30s
-        delivery.timeout.ms: 120000 # 消息发送超时时间，默认值 120s ，应该大于 request.timeout.ms+linger.ms。影响消息发送的超时报错。
-        max.block.ms: 1000 # 默认值 1 分钟，发送消息时，控制最大阻塞时长
-#      transaction-id-prefix: kfk # kafka 事务的前缀，只要配置了该属性，就必须使用事务发布，如果还想用非事务发布就比较麻烦了，Spring 就会自动创建一个 kafka 的事务 bean
+        batch.size: 16384 # 默认值 16384 bytes，也就是16 kb。生产者将发送到同一分区的消息进行打包批量发送的大小阈值
+        linger.ms: 0 # 默认值 0 无延迟。消息发送延迟，控制批量的消息是否到达了 batch.size 的大小，如果很久也没到 batch.size 的值，就根据该配置的时间直接把数据发送，省的一直在缓存里不发
+        request.timeout.ms: 30000 # 默认值 30s。请求超时时间
+        delivery.timeout.ms: 120000 # 消息发送超时时间，默认值 120s，调用 send ()返回后报告成功或失败的时间上限 。应该大于 request.timeout.ms+linger.ms。影响消息发送的超时报错。
+        max.block.ms: 60000 # 默认值 1 分钟，发送消息时，控制最大阻塞时长
+#      transaction-id-prefix: kfk # kafka 事务的前缀，只要配置了该属性，Spring 就会自动创建一个 kafka 的事务 bean，但必须使用事务发布，如果还想用非事务发布就比较麻烦了
 server:
   port: 8081
